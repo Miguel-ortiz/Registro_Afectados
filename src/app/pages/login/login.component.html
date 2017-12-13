@@ -1,0 +1,27 @@
+<div class="login-container">
+    <div class="col-xl-4 col-md-6 col-10 offset-xl-4 offset-md-3 offset-1">
+        <div class="card">
+            <div class="card-block text-center">
+                <h2 class="card-title">REGISTRO DE AFECTADOS</h2>              
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class=" text-left">
+                    <div class="form-group">
+                        <input [formControl]="usuario" class="form-control checking-field" placeholder="Usuario" type="text">                      
+                        <span class="help-block text-danger" *ngIf="form.get('usuario').touched && form.get('usuario').hasError('required')">El usuario es requerido</span> 
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="password" class="form-control checking-field" placeholder="Contraseña" type="password">
+                        <span class="help-block text-danger" *ngIf="form.get('password').touched && form.get('password').hasError('required')">La contraseña es requerida</span> 
+                        <span class="help-block text-danger" *ngIf="form.get('password').touched && form.get('password').hasError('minlength')">La contraseña debe ser minimo de 6 caracteres</span>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-link forgot transition pull-right" href="javascript:void(0);">Restrablecer contraseña</a>                     
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="!form.valid" class="btn btn-main btn-block" type="submit">Ingresar</button>
+                    </div>
+                </form>              
+            </div>
+        </div>
+    </div>
+</div>
+

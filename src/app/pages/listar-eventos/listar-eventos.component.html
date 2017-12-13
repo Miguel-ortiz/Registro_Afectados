@@ -1,0 +1,438 @@
+
+    <div class="row bottom-30">
+        <div class="col">
+            <div widget class="card">
+                <div class="card-header">
+                    <span>CONSULTA EVENTOS</span>
+                    <div class="widget-controls">              
+                        <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                        <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                        <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                        <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>                          
+                        <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                    </div>        
+                </div>
+                <div class="card-block widget-body">
+
+                     <form  (ngSubmit)="listarEventos(frmConsulta)" #frmConsulta="ngForm" 
+                            class="row form-inline">
+                        <div class="form-group col-md-2 col-sm-6">
+                            <label for="fechaInicial">Fecha evento Incial</label>
+                            <input type="date" class="form-control" ngModel name="fechaInicial" id="fechaInicial" required>
+                        </div>
+                        <div class="form-group col-md-2 col-sm-6">
+                            <label for="fechaFinal">Fecha del Evento Final</label>
+                            <input type="date" class="form-control" ngModel name="fechaFinal" id="fechaFinal" required>
+                        </div>         
+                        <div class="form-group col-md-2 col-sm-6">
+                            <label for="eventoSire">Número Sire</label>
+                            <input type="text" class="form-control" ngModel name="eventoSire" id="eventoSire" placeholder="Número SIRE">                            
+                        </div>
+                        <div class="form-group col-md-2 col-sm-6">
+                            <label for="eventoNuse">Número Nuse</label>
+                            <input type="text" class="form-control" ngModel name="eventoNuse" id="eventoNuse" placeholder="Número NUSE">                             
+                        </div>  
+                        <div class="form-group col-md-2 col-sm-6">
+                            <label for="identificacion">Número Identificación</label>
+                            <input type="text" class="form-control" ngModel name="identificacion" id="identificacion" placeholder="Número Identificación">                            
+                        </div>  
+                        <div class="form-group col-md-2 col-sm-6">
+                            <button type="submit" class="btn btn-outline-info btn-sm">Consultar</button>
+                        </div> 
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+<div class="row">
+    <div class="col">
+        
+        <div widget class="card" *ngIf="eventos && eventos.length >0"  >
+            <div class="card-header">
+                <span class="text-uppercase">EVENTOS REGISTRADOS</span>
+                <div class="widget-controls"> 
+                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>                          
+                    <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                </div>        
+            </div>
+            <div class="card-block widget-body">
+                <p class="no-margin">  DataTable - Simple table component with sorting and pagination for Angular2. Built with <a href="https://github.com/mariuszfoltak/angular2-datatable" target="_blank">angular2-datatables</a></p>
+                <!-- 
+                <div class="w-200 pull-right bottom-15">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input class="form-control" id="table-search-input" [(ngModel)]="searchText" type="text" placeholder="Search name...">
+                    </div>
+                </div> 
+                -->
+             
+    
+                <div class="table-responsive datatable" >
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Descripción</th>
+                                <th>Incio evento</th>
+                                <th>Fin evento</th>
+                                <th>Tipo de evento SIRE</th>                            
+                                <th># SIRE - NUSE</th>                            
+                                <th>Dirección</th>
+                                <th>Localidad</th>
+                                <th>UPZ</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>                           
+                            <tr *ngFor="let evento of eventos" [class.text-info]="evento.idEventoEtapa.id === 1" 
+                            [class.text-success]="evento.idEventoEtapa.id === 2"
+                             [class.text-warning]="evento.idEventoEtapa.id === 3"
+                              [class.text-danger]="evento.idEventoEtapa.id === 4"
+                              [class.text-mute]="evento.idEventoEtapa.id === 5" >
+                                <td>{{evento.id}}</td>
+                                <td><strong>{{evento.descripcion}}</strong></td>
+                                <td>{{evento.fechaInicio}}</td>
+                                <td>{{evento.fechaFin}}</td>   
+                                <td>{{evento.idEventoTipo.nombre}}</td>
+                                <td>
+                                    <small><b>SIRE: </b>{{listarEventosSireRelacionados(evento.eventoRelacionadoList)}}</small>
+                                    <br>
+                                    <small><b>NUSE: </b>{{listarEventosNuseRelacionados(evento.eventoRelacionadoList)}}</small>
+                                </td>
+                                <td>{{evento.direccion}} &nbsp; {{evento.barrio}} </td>
+                                <td>{{evento.idLocalidad.nombre}}</td>
+                                <td>{{evento.idUpz.nombre}}</td>
+                                <td>{{evento.idEventoEtapa.nombre}}</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>   
+                            </tr>                          
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="12">
+                                   
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-outline-info text-center"*ngIf="eventos && eventos.length === 0"  >
+            <div class="card-block">
+                <blockquote class="card-blockquote">
+                    <h5><p class="text-info"><strong> Consulta sin resultados!</strong></p></h5>
+                    <p class="text-info">No existen eventos registrados con estos criterios de busqueda.</p>
+                    
+                </blockquote>
+            </div>
+        </div>
+        <!-- 
+        <br>
+        
+        <div class="card"  *ngIf="eventos && eventos.length === 0" >
+            <div class="card-header">
+                Consulta sin resultados!
+            </div>
+            <div class="card-block">
+                <p class="card-text">No existen eventos registrados con estos criterios de busqueda.</p>
+            </div>
+            <div class="card-footer">
+                
+            </div>
+        </div>   
+            
+        <br>
+        <div class="alert alert-info" role="alert" *ngIf="eventos && eventos.length === 0" >
+            <strong>Consulta sin resultados!</strong> No existen eventos registrados con estos criterios de busqueda
+        </div>      
+        -->  
+    </div>
+</div>
+<!-- 
+<div class="row bottom-30">
+    <div class="col">       
+        <div widget class="card">
+            <div class="card-header">
+                <span>Listado de Eventos Registados</span>
+                <div class="widget-controls">              
+                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>                          
+                    <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                </div>        
+            </div>
+                    
+                <div class="card-block widget-body">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Incio evento</th>
+                                <th>Fin evento</th>
+                                <th>Tipo de evento SIRE</th>                            
+                                <th># SIRE - NUSE</th>                            
+                                <th>Dirección</th>
+                                <th>Localidad</th>
+                                <th>UPZ</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-info">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Registro</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr class="text-info">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Registro</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                             
+                            </tr>
+                            <tr class="text-success">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Proceso</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>     
+                            <tr class="text-success">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Proceso</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr> 
+                            <tr class="text-success">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Proceso</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>   
+                            <tr class="text-warning">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Revisión</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr class="text-warning">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Revisión</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr> 
+                            <tr class="text-warning">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Revisión</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>    
+                            <tr class="text-danger">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Cerrado</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>     
+                            <tr class="text-danger">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Cerrado</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr class="text-danger">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Cerrado</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr class="text-danger">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Cerrado</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr class="text-danger">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014 - 2017SR2017 - 2017SR2033 - 2017SR2054</small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255 - 252555 - 2565888 - 2552566</small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Cerrado</td>
+                                <td>
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>                                                                                                                                                                                                                                                               
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>    
+</div>
+<div class="form-group col-md-12 col-sm-12 text-right">
+     <a href="http://localhost:4200/pages/registar-eventos" class="btn btn-outline-info btn-sm">Registrar Nuevo Evento</a>    
+</div> 
+-->

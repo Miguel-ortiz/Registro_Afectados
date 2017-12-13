@@ -1,0 +1,564 @@
+
+<div class="row bottom-30">
+    <div class="col">
+        <div widget class="card">
+            <div class="card-header">
+                <span>DETALLE DEL EVENTO</span>
+                <div class="widget-controls">              
+                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>                          
+                    <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                </div>        
+            </div>
+            <form #formulario="ngForm" 
+                (submit)="registrarEvento(formulario)">
+                <div class="card-block widget-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="idEventoEtapa">Etapa</label>
+                                <select class="form-control" 
+                                        id="idEventoEtapa" 
+                                        style="width:100%" ngModel name="idEventoEtapa" required>
+                                    <option selected value=" " >Seleccionar</option>
+                                    <option *ngFor="let etapa of eventoEtapas" [value]="etapa.id">{{etapa.nombre}}</option>
+                                </select> 
+                            </div>
+                        </div>                         
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="idEventoTipo">Tipo de Evento</label>
+                                <select class="form-control" id="idEventoTipo" style="width:100%" ngModel name="idEventoTipo" required >                                   
+                                    <option *ngFor="let tipo of eventoTipos"[value]="tipo.id">{{tipo.nombre}}</option>
+                                </select> 
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="descripcion">Descripción</label>
+                                <input type="text" class="form-control" id="descripcion" placeholder="Descripción del evento" ngModel name="descripcion" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="fechaInicio">Fecha Inicio</label>
+                                <input type="datetime-local"  class="form-control" id="fechaInicio" placeholder="Fecha de ocurrencia del Evento" ngModel name="fechaInicio">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="fechaFin">Fecha Finalización</label>
+                                <input type="datetime-local" class="form-control" id="fechaFin" placeholder="Fecha de ocurrencia del Evento" ngModel name="fechaFin">
+                            </div>
+                        </div>                        
+                   
+                    </div>
+                    <div class="row">    
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" class="form-control" id="direccion" placeholder="Dirección del evento" ngModel name="direccion">
+                            </div>
+                        </div>   
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="barrio">Barrio</label>
+                                <input type="text" class="form-control" id="barrio" placeholder="Barrio"  ngModel name="barrio">
+                            </div>
+                        </div>      
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="idLocalidad">Localidad</label>
+                                <select class="form-control" 
+                                        style="width:100%"
+                                        id="idLocalidad" 
+                                        name="idLocalidad"                                           
+                                        [(ngModel)]="localidadesListFilter">                                   
+                                   <option *ngFor="let localidad of localidades" [ngValue]="localidad" [value]="localidad.id">{{localidad.nombre}}</option>                          
+                                </select> 
+                            </div>
+                        </div> 
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="idUPZ">UPZ</label>
+                                <select class="form-control"
+                                        style="width:100%"
+                                        id="idUPZ" 
+                                        name="idUPZ"
+                                        [(ngModel)]="upzListFilter">                                   
+                                   <option *ngFor="let upz of localidadesListFilter?.upzList" [ngValue]="upz.id" [value]="upz.id">{{upz.nombre}}</option>                          
+                                </select> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <button type="button" (click)="openMyModal()">Click me!</button>
+                    <ngbd-modal-content></ngbd-modal-content>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-outline-info btn-sm">Guardar</button>
+                    </div>               
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="row bottom-30">
+    <div class="col">       
+        <div widget class="card">
+            <div class="card-header">
+                <span>Listado de Eventos Vinculados</span>
+                <div class="widget-controls">      
+                    <a href="#" class=" transition setting" data-toggle="modal" data-target="#info-modal" >
+                        <i class="fa fa fa-check">&nbsp;<span>Vincular un nuevo evento SIRE - NUSE </span></i>
+                    </a>                              
+                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>                          
+                    <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                </div>        
+            </div>
+                    
+                <div class="card-block widget-body">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Incio evento</th>
+                                <th>Fin evento</th>
+                                <th>Tipo de evento SIRE</th>                            
+                                <th># SIRE - NUSE</th>                            
+                                <th>Dirección</th>
+                                <th>Localidad</th>
+                                <th>UPZ</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-info">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014  </small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255  </small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Registro</td>
+                                <td>                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr class="text-info">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2022  </small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2356566  </small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Registro</td>
+                                <td>                                   
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                             
+                            </tr>
+                            <tr class="text-info">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2055  </small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 656566  </small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Proceso</td>
+                                <td>                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>     
+                            <tr class="text-info">
+                                <td>21/03/2017 10:30</td>
+                                <td>21/03/2017 14:00</td>
+                                <td>Inundación</td>
+                                <td>
+                                    <small><b>SIRE:</b> &nbsp; 2017SR2014  </small>
+                                    <br>
+                                    <small><b>NUSE:</b>&nbsp; 2510255  </small>
+                                </td>
+                                <td>Clle 138 # 54d - 01</td>
+                                <td>SUBA</td>
+                                <td>Gyamaral</td>
+                                <td>Proceso</td>
+                                <td>                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr> 
+                           
+                                                                                                                                                                                                                                                                                         
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>    
+</div>
+
+
+<div class="row bottom-30">
+    <div class="col">       
+        <div widget class="card">
+            <div class="card-header">
+                <span>Personas Vinculadas</span>
+                <div class="widget-controls">      
+                    <a href="#" class=" transition setting" data-toggle="modal" data-target="#info-modal-Reg" >
+                        <i class="fa fa fa-check">&nbsp;<span>Realizar nueva Vinculación </span></i>
+                    </a>                              
+                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>                          
+                    <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                </div>        
+            </div>
+                    
+                <div class="card-block widget-body">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Identificacion</th>
+                                <th>Nombre</th>
+                                <th>Dirección</th>                            
+                                <th>Inclucion</th>                            
+                                <th>Nucleo</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>4522882</td>
+                                <td>Jose Maria Diaz</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Familiar</td>
+                                <td>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Identificacion</th>
+                                                <th>Nombre</th>
+                                                <th>Parentezco</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="text-info">
+                                                <td>255255844</td>
+                                                <td> Ana Perez</td>
+                                                <td>Esposa</td>                               
+                                            </tr>
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Juan Diaz</td>
+                                                <td>Hijo</td>                               
+                                            </tr>							
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Maria Diaz</td>
+                                                <td>Madre</td>                               
+                                            </tr>	
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Camila Diaz</td>
+                                                <td>Hija</td>                               
+                                            </tr>	                           
+                                                                                                                                                                                                                                                                                                        
+                                        </tbody>
+                                    </table>                                
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr>                            
+                                <td>4522882</td>
+                                <td>Jorge Castaño</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Individual</td>
+                                <td>                             
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>                            
+                            <tr>                            
+                                <td>4522882</td>
+                                <td>Jorge Castaño</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Individual</td>
+                                <td>                             
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>    
+                            <tr>                            
+                                <td>4522882</td>
+                                <td>Jorge Castaño</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Individual</td>
+                                <td>                             
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>    
+                            <tr>
+                                <td>4522882</td>
+                                <td>Jose Maria Diaz</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Familiar</td>
+                                <td>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Identificacion</th>
+                                                <th>Nombre</th>
+                                                <th>Parentezco</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="text-info">
+                                                <td>255255844</td>
+                                                <td> Ana Perez</td>
+                                                <td>Esposa</td>                               
+                                            </tr>
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Juan Diaz</td>
+                                                <td>Hijo</td>                               
+                                            </tr>							
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Maria Diaz</td>
+                                                <td>Madre</td>                               
+                                            </tr>	
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Camila Diaz</td>
+                                                <td>Hija</td>                               
+                                            </tr>	                           
+                                                                                                                                                                                                                                                                                                        
+                                        </tbody>
+                                    </table>                                
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>
+                            <tr>
+                                <td>4522882</td>
+                                <td>Jose Maria Diaz</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Familiar</td>
+                                <td>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Identificacion</th>
+                                                <th>Nombre</th>
+                                                <th>Parentezco</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="text-info">
+                                                <td>255255844</td>
+                                                <td> Ana Perez</td>
+                                                <td>Esposa</td>                               
+                                            </tr>
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Juan Diaz</td>
+                                                <td>Hijo</td>                               
+                                            </tr>							
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Maria Diaz</td>
+                                                <td>Madre</td>                               
+                                            </tr>	
+                                            <tr class="text-info">
+                                                <td>557455</td>
+                                                <td>Camila Diaz</td>
+                                                <td>Hija</td>                               
+                                            </tr>	                           
+                                                                                                                                                                                                                                                                                                        
+                                        </tbody>
+                                    </table>                                
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>                                                        
+                            <tr>                            
+                                <td>4522882</td>
+                                <td>Jorge Castaño</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Individual</td>
+                                <td>                             
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>    
+                            <tr>                            
+                                <td>4522882</td>
+                                <td>Jorge Castaño</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Individual</td>
+                                <td>                             
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>    
+                            <tr>                            
+                                <td>4522882</td>
+                                <td>Jorge Castaño</td>
+                                <td>Carrera 12 # 25 -15</td>
+                                <td>Individual</td>
+                                <td>                             
+                                </td>
+                                <td>    
+                                    <img src="../assets/img/app/update.png" alt="Actualizar"  height="32" width="32" >                                                                    
+                                    <img src="../assets/img/app/delete.png" alt="Eliminar"  height="32" width="32" >                                                                   
+                                </td>                              
+                            </tr>                                                                                                                                               
+                                                                                                                                                                                                                                                                                         
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>    
+</div>
+<div class="form-group col-md-12 col-sm-12 text-right">
+    <a href="#" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#info-modal-Reg" >
+        Registrar
+    </a>                              
+</div> 
+<div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="modal-info-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header state modal-info">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="modal-info-label"><i class="fa fa-info"></i>Consulta de eventos</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputFechaEvento">Numero Evento SIRE</label>
+                            <input type="text" class="form-control" id="input-12" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="inputFechaEvento">Numero Evento NUSE</label>
+                            <input type="text" class="form-control" id="input-12" placeholder="">
+                        </div>
+                    </div>                  
+                </div>
+                <div class="row justify-content-center">
+                   <button type="submit" class="btn btn-outline-info btn-sm">Consultar</button>
+                </div> 
+                    <div class="col-md-12 col-12 bottom-15">
+                        <h6>Eventos</h6>
+                        <div class="form-group">
+                            <div class="custom-controls-stacked">
+                                <label class="custom-control custom-radio">
+                                    <input type="radio" name="stacked-radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Inundacion en Chapinero el 15/01/2017 </span>
+                                </label>
+                               
+                            </div>
+                        </div>
+
+                    </div>                     
+            </div>
+            <div class="modal-footer">                
+                <button type="button" class="btn btn-info" data-dismiss="modal">Seleccionar</button>                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="info-modal-Reg" tabindex="-1" role="dialog" aria-labelledby="modal-info-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header state modal-info">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="modal-info-label"><i class="fa fa-info"></i>Registro Vinculado</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="exampleSelect1">Tipo Vinculación</label>
+                            <select class="form-control" id="exampleSelect1" style="width:100%">
+                                <option value=" " >Seleccionar</option>
+                                <option>Hogar Afectado</option>
+                                <option>Individual en area publica</option>
+                                <option>Ambiental</option>
+                                <option>Bien Publico</option>                                
+                            </select> 
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="custom-controls-stacked">
+                                <label class="custom-control custom-radio">
+                                    <input type="radio" name="stacked-radio" class="custom-control-input radio-success">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Afectado</span>
+                                </label>                                
+                                <label class="custom-control custom-radio">
+                                    <input type="radio" name="stacked-radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">No Afectado</span>
+                                </label>
+                            </div>
+                        </div>                        
+
+                    </div>                  
+                </div>
+                <div class="row justify-content-center">
+                   <a href="http://localhost:4200/pages/registro-familiar" class="btn btn-outline-info btn-sm">Registrar</a>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
