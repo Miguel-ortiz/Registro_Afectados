@@ -39,4 +39,8 @@ export class PagesComponent implements OnInit {
         this._state.notifyDataChanged('menu.isCollapsed', true);    
     }
 
+    public ngAfterViewInit(): void {
+        document.getElementById('preloader').style['display'] = 'none';
+    }
+
 }

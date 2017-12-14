@@ -9,7 +9,7 @@ import { AppConfig } from './app.config';
 
 import { AppComponent } from './app.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { Http } from "@angular/http";
+//import { Http } from "@angular/http";
 import { AutenticacionService } from "./pages/login/autenticacion.service";
 
 

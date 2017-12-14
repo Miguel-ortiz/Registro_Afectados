@@ -16,6 +16,10 @@ export const menuItems = [
     order: 100,
     subMenu: [
       {
+        title: 'Registro Familia',
+        routerLink: 'registro-familiar',
+      },
+      {
         title: 'Listar',
         routerLink: 'listar-eventos',
       },
